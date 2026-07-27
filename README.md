@@ -24,6 +24,10 @@ chmod +x build
 ```
 3. Flash zip via Magisk Manager -> Modules -> Install from storage
 4. Reboot
+5. Open android shell via adb or any terminal and run:
+```bash
+hermes-build
+```
 
 ## License
 
