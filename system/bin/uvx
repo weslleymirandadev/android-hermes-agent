@@ -1,0 +1,1 @@
+exec /data/hermes/bin/uvx "$@"

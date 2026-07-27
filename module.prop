@@ -1,0 +1,6 @@
+id=android-hermes-agent
+name=Android Hermes Agent
+version=0.19.0
+versionCode=1
+author=https://github.com/weslleymirandadev
+description=Python 3.14 + Hermes Agent for Android ARM64. Installs python, pip, uv and hermes-agent on /data/hermes/.

@@ -1,0 +1,7 @@
+export LD_LIBRARY_PATH=/data/hermes/lib
+export PYTHON_HISTORY=/data/hermes/.python_history
+export XDG_CACHE_HOME=/data/hermes/.cache
+export UV_CACHE_DIR=/data/hermes/.cache/uv
+export UV_PYTHON=/data/hermes/bin/python3-wrapper
+export PATH=$PATH:/data/hermes/bin
+exec /data/hermes/bin/python3.14 -m pip "$@"
