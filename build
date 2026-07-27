@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # Build Android Hermes Agent Magisk Module
 set -e
 

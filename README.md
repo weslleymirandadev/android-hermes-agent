@@ -1,6 +1,6 @@
 # Android Hermes Agent
 
-Magisk module that installs Python 3.14 + native deps + Hermes Agent on Android ARM64.
+Magisk module that installs Python 3.14 + native deps + Hermes Agent on Android ARM64. No Termux needed.
 
 ## What it does
 
@@ -12,9 +12,18 @@ Magisk module that installs Python 3.14 + native deps + Hermes Agent on Android 
 
 ## Installation
 
-1. Download `android-hermes-agent.zip` from releases
-2. Magisk Manager -> Modules -> Install from storage
-3. Reboot
+1. Clone this repo:
+```bash
+git clone https://github.com/weslleymirandadev/android-hermes-agent --depth 1
+cd android-hermes-agent
+```
+2. Zip this Magisk Module:
+```bash
+chmod +x build
+./build
+```
+3. Flash zip via Magisk Manager -> Modules -> Install from storage
+4. Reboot
 
 ## License
 

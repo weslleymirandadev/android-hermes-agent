@@ -1,7 +1,7 @@
 #!/system/bin/sh
 
 # Android Hermes Agent - Magisk Module Installer
-# Installs Python 3.14 + native deps + Hermes Agent
+# Installs Python 3.14 + native deps
 
 HERMES_DATA=/data/hermes
 HERMES_BIN=$HERMES_DATA/bin
@@ -12,13 +12,6 @@ echo " Android Hermes Agent"
 echo " github.com/weslleymirandadev/"
 echo "         android-hermes-agent"
 echo "=============================="
-echo ""
-echo "██╗  ██╗███████╗██████╗ ███╗   ███╗███████╗███████╗"
-echo "██║  ██║██╔════╝██╔══██╗████╗ ████║██╔════╝██╔════╝"
-echo "███████║█████╗  ██████╔╝██╔████╔██║█████╗  ███████╗"
-echo "██╔══██║██╔══╝  ██╔══██╗██║╚██╔╝██║██╔══╝  ╚════██║"
-echo "██║  ██║███████╗██║  ██║██║ ╚═╝ ██║███████╗███████║"
-echo "╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝╚══════╝"
 echo ""
 
 # Copy everything from module to /data/hermes
@@ -45,28 +38,25 @@ done
 touch $HERMES_DATA/.python_history 2>/dev/null
 mkdir -p $HERMES_DATA/.cache/uv 2>/dev/null
 
-# Load environment
-. $HERMES_DATA/env.sh
-
-echo "Python 3.14.6 + native deps installed!"
-echo ""
-echo "=============================="
-echo " Installing Hermes Agent"
-echo "=============================="
-echo ""
-
-# Install Hermes Agent with full environment
-$HERMES_BIN/uv pip install \
-  hermes-agent 2>&1
+# Create python3-wrapper for uv (uv calls Python directly without LD_LIBRARY_PATH)
+cat > $HERMES_BIN/python3-wrapper << 'WRAP'
+#!/system/bin/sh
+export LD_LIBRARY_PATH=/data/hermes/lib
+exec /data/hermes/bin/python3.14 "$@"
+WRAP
+chmod 755 $HERMES_BIN/python3-wrapper
 
 echo ""
 echo "=============================="
-echo " Android Hermes Agent installed!"
+echo " Python 3.14.6 installed!"
 echo "=============================="
 echo ""
-echo "Commands: python3, pip3, uv, hermes"
-echo "Config:   source /data/hermes/env.sh"
+echo "Commands: python3, pip3, uv"
+echo "Data:     $HERMES_DATA/"
 echo ""
-echo "Test: python3 --version"
-echo "       hermes --version"
+echo "To install Hermes Agent, run after reboot as Root:"
+echo "  hermes-build"
+echo ""
+echo "This compiles jiter + pydantic-core and"
+echo "installs hermes-agent (takes ~10 min)."
 echo ""
