@@ -1,9 +1,35 @@
 #!/system/bin/sh
-# hermes-build - Compile native Rust deps and install Hermes Agent
+# hermes-build - installs Hermes Agent (native wheels are pre-installed)
 export LD_LIBRARY_PATH=/data/hermes/lib
 export PYTHON_HISTORY=/data/hermes/.python_history
 export XDG_CACHE_HOME=/data/hermes/.cache
 export UV_CACHE_DIR=/data/hermes/.cache/uv
 export UV_PYTHON=/data/hermes/bin/python3-wrapper
 export PATH=$PATH:/data/hermes/bin
-exec sh /data/hermes/scripts/build-native-deps.sh "$@"
+
+echo ""
+echo "=============================="
+echo " Android Hermes Agent"
+echo " github.com/weslleymirandadev/"
+echo "         android-hermes-agent"
+echo "=============================="
+echo ""
+
+echo "██╗  ██╗███████╗██████╗ ███╗   ███╗███████╗███████╗"
+echo "██║  ██║██╔════╝██╔══██╗████╗ ████║██╔════╝██╔════╝"
+echo "███████║█████╗  ██████╔╝██╔████╔██║█████╗  ███████╗"
+echo "██╔══██║██╔══╝  ██╔══██╗██║╚██╔╝██║██╔══╝  ╚════██║"
+echo "██║  ██║███████╗██║  ██║██║ ╚═╝ ██║███████╗███████║"
+echo "╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝╚══════╝"
+echo ""
+
+echo "Installing Hermes Agent..."
+pip3 install hermes-agent 2>&1
+
+echo ""
+echo "=============================="
+echo " Done!"
+echo "=============================="
+echo ""
+echo "Test: hermes --version"
+echo ""

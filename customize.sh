@@ -1,7 +1,7 @@
 #!/system/bin/sh
 
 # Android Hermes Agent - Magisk Module Installer
-# Installs Python 3.14 + native deps
+# Installs Python 3.14 + native deps + Hermes Agent
 
 HERMES_DATA=/data/hermes
 HERMES_BIN=$HERMES_DATA/bin
@@ -34,11 +34,7 @@ for f in pip pip3 pip3.14; do
   fi
 done
 
-# Create writable paths
-touch $HERMES_DATA/.python_history 2>/dev/null
-mkdir -p $HERMES_DATA/.cache/uv 2>/dev/null
-
-# Create python3-wrapper for uv (uv calls Python directly without LD_LIBRARY_PATH)
+# Create python3-wrapper for uv
 cat > $HERMES_BIN/python3-wrapper << 'WRAP'
 #!/system/bin/sh
 export LD_LIBRARY_PATH=/data/hermes/lib
@@ -46,17 +42,25 @@ exec /data/hermes/bin/python3.14 "$@"
 WRAP
 chmod 755 $HERMES_BIN/python3-wrapper
 
+# Create writable paths
+touch $HERMES_DATA/.python_history 2>/dev/null
+mkdir -p $HERMES_DATA/.cache/uv 2>/dev/null
+
+# Install pre-compiled native wheels (jiter, pydantic-core)
+echo "Installing native wheels..."
+export LD_LIBRARY_PATH=/data/hermes/lib
+for whl in $HERMES_DATA/wheels/*.whl; do
+  echo "  $(basename $whl)..."
+  $HERMES_BIN/pip3 install "$whl" 2>&1
+done
+
 echo ""
 echo "=============================="
-echo " Python 3.14.6 installed!"
+echo " Python 3.14.6 + native wheels installed!"
 echo "=============================="
 echo ""
 echo "Commands: python3, pip3, uv"
-echo "Data:     $HERMES_DATA/"
 echo ""
-echo "To install Hermes Agent, run after reboot as Root:"
-echo "  hermes-build"
-echo ""
-echo "This compiles jiter + pydantic-core and"
-echo "installs hermes-agent (takes ~10 min)."
+echo "To install Hermes Agent, run after reboot (root required):"
+echo "  $ hermes-build "
 echo ""
