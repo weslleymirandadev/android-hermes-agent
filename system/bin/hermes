@@ -3,4 +3,5 @@ export LD_LIBRARY_PATH=/data/hermes/lib
 export PYTHON_HISTORY=/data/hermes/.python_history
 export XDG_CACHE_HOME=/data/hermes/.cache
 export PATH=/data/hermes/venv/bin:$PATH
-exec /data/hermes/venv/bin/hermes "$@"
+source /data/hermes/venv/bin/activate
+python3 -m hermes_cli.main "$@"

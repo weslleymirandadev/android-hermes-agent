@@ -15,7 +15,7 @@ echo "=============================="
 echo ""
 
 # Copy everything from module to /data/hermes
-echo "Installing Python 3.14 + native deps..."
+echo "Installing Python 3.14..."
 rm -rf $HERMES_DATA 2>/dev/null
 cp -r $MODPATH/system/hermes $HERMES_DATA
 
@@ -34,15 +34,10 @@ done
 # Create writable paths
 touch $HERMES_DATA/.python_history 2>/dev/null
 
+echo "Python 3.14 Installed!"
+
 export LD_LIBRARY_PATH=/data/hermes/lib
 export PATH=$PATH:/data/hermes/bin
-
-echo "Installing native wheels..."
-export LD_LIBRARY_PATH=/data/hermes/lib
-for whl in $HERMES_DATA/wheels/*.whl; do
-  echo "  $(basename $whl)..."
-  pip3 install "$whl" 2>&1
-done
 
 VENV=/data/hermes/venv
 
@@ -60,13 +55,4 @@ cd /data/hermes
 python3 -m venv $VENV
 source $VENV/bin/activate
 
-pip3 install \
-  openai httpx rich pydantic pyyaml jinja2 markdown python-dotenv \
-  requests tenacity croniter packaging pathspec psutil \
-  certifi urllib3 fire prompt-toolkit PyJWT ruamel.yaml
-
-pip3 install hermes-agent
-
-echo " Done."
-echo ""
-
+python3 -m pip install hermes-agent
