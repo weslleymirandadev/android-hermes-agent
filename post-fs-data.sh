@@ -15,7 +15,6 @@ fi
 
 # --- WRITABLE PATHS: create if missing ---
 touch $HERMES_DATA/.python_history 2>/dev/null
-mkdir -p $HERMES_DATA/.cache/uv 2>/dev/null
 
 # --- ENVIRONMENT VARIABLES: exported for all child processes ---
 # Python: find shared libraries (.so files)
@@ -24,8 +23,5 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HERMES_DATA/lib
 export PYTHON_HISTORY=$HERMES_DATA/.python_history
 # uv: writable cache directory
 export XDG_CACHE_HOME=$HERMES_DATA/.cache
-export UV_CACHE_DIR=$HERMES_DATA/.cache/uv
-# uv: which Python interpreter to use (wrappers set LD_LIBRARY_PATH)
-export UV_PYTHON=$HERMES_DATA/bin/python3-wrapper
 # PATH: ensure hermes/python/pip/uv are accessible
 export PATH=$PATH:$HERMES_DATA/bin

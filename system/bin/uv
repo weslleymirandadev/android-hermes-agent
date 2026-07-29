@@ -1,5 +1,0 @@
-export XDG_CACHE_HOME=/data/hermes/.cache
-export UV_CACHE_DIR=/data/hermes/.cache/uv
-export UV_PYTHON=/data/hermes/bin/python3-wrapper
-mkdir -p $UV_CACHE_DIR 2>/dev/null
-exec /data/hermes/bin/uv "$@"

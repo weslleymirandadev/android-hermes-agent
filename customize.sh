@@ -24,8 +24,6 @@ chmod -R 755 $HERMES_DATA
 find $HERMES_DATA/lib -name "*.so*" -exec chmod 644 {} \; 2>/dev/null || true
 chmod 755 $HERMES_DATA/bin/python3.14
 chmod 755 $HERMES_DATA/bin/pip*
-chmod 755 $HERMES_DATA/bin/uv
-chmod 755 $HERMES_DATA/bin/uvx
 
 # Fix pip shebangs
 for f in pip pip3 pip3.14; do
@@ -33,34 +31,42 @@ for f in pip pip3 pip3.14; do
     sed -i 's|#!/data/data/com.termux/files/usr/bin/python3.14|#!/data/hermes/bin/python3.14|' "$HERMES_BIN/$f"
   fi
 done
-
-# Create python3-wrapper for uv
-cat > $HERMES_BIN/python3-wrapper << 'WRAP'
-#!/system/bin/sh
-export LD_LIBRARY_PATH=/data/hermes/lib
-exec /data/hermes/bin/python3.14 "$@"
-WRAP
-chmod 755 $HERMES_BIN/python3-wrapper
-
 # Create writable paths
 touch $HERMES_DATA/.python_history 2>/dev/null
-mkdir -p $HERMES_DATA/.cache/uv 2>/dev/null
 
-# Install pre-compiled native wheels (jiter, pydantic-core)
+export LD_LIBRARY_PATH=/data/hermes/lib
+export PATH=$PATH:/data/hermes/bin
+
 echo "Installing native wheels..."
 export LD_LIBRARY_PATH=/data/hermes/lib
 for whl in $HERMES_DATA/wheels/*.whl; do
   echo "  $(basename $whl)..."
-  $HERMES_BIN/pip3 install "$whl" 2>&1
+  pip3 install "$whl" 2>&1
 done
 
+VENV=/data/hermes/venv
+
 echo ""
-echo "=============================="
-echo " Python 3.14.6 + native wheels installed!"
-echo "=============================="
+echo "██╗  ██╗███████╗██████╗ ███╗   ███╗███████╗███████╗"
+echo "██║  ██║██╔════╝██╔══██╗████╗ ████║██╔════╝██╔════╝"
+echo "███████║█████╗  ██████╔╝██╔████╔██║█████╗  ███████╗"
+echo "██╔══██║██╔══╝  ██╔══██╗██║╚██╔╝██║██╔══╝  ╚════██║"
+echo "██║  ██║███████╗██║  ██║██║ ╚═╝ ██║███████╗███████║"
+echo "╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝╚══════╝"
 echo ""
-echo "Commands: python3, pip3, uv"
+
+rm -rf $VENV
+cd /data/hermes
+python3 -m venv $VENV
+source $VENV/bin/activate
+
+pip3 install \
+  openai httpx rich pydantic pyyaml jinja2 markdown python-dotenv \
+  requests tenacity croniter packaging pathspec psutil \
+  certifi urllib3 fire prompt-toolkit PyJWT ruamel.yaml
+
+pip3 install hermes-agent
+
+echo " Done."
 echo ""
-echo "To install Hermes Agent, run after reboot (root required):"
-echo "  $ hermes-build "
-echo ""
+

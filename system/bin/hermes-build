@@ -1,20 +1,10 @@
 #!/system/bin/sh
-# hermes-build - installs Hermes Agent (native wheels are pre-installed)
 export LD_LIBRARY_PATH=/data/hermes/lib
-export PYTHON_HISTORY=/data/hermes/.python_history
-export XDG_CACHE_HOME=/data/hermes/.cache
-export UV_CACHE_DIR=/data/hermes/.cache/uv
-export UV_PYTHON=/data/hermes/bin/python3-wrapper
 export PATH=$PATH:/data/hermes/bin
 
-echo ""
-echo "=============================="
-echo " Android Hermes Agent"
-echo " github.com/weslleymirandadev/"
-echo "         android-hermes-agent"
-echo "=============================="
-echo ""
+VENV=/data/hermes/venv
 
+echo ""
 echo "██╗  ██╗███████╗██████╗ ███╗   ███╗███████╗███████╗"
 echo "██║  ██║██╔════╝██╔══██╗████╗ ████║██╔════╝██╔════╝"
 echo "███████║█████╗  ██████╔╝██╔████╔██║█████╗  ███████╗"
@@ -23,13 +13,17 @@ echo "██║  ██║███████╗██║  ██║██║ 
 echo "╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝╚══════╝"
 echo ""
 
-echo "Installing Hermes Agent..."
-pip3 install hermes-agent 2>&1
+rm -rf $VENV
+cd /data/hermes
+python3 -m venv $VENV
+source $VENV/bin/activate
 
-echo ""
-echo "=============================="
-echo " Done!"
-echo "=============================="
-echo ""
-echo "Test: hermes --version"
+pip3 install \
+  openai httpx rich pydantic pyyaml jinja2 markdown python-dotenv \
+  requests tenacity croniter packaging pathspec psutil \
+  certifi urllib3 fire prompt-toolkit PyJWT ruamel.yaml
+
+pip3 install hermes-agent
+
+echo " Done."
 echo ""
